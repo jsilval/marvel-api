@@ -2,7 +2,6 @@ package com.jsilval.marvel.core.data.source.remote;
 
 import android.util.Log;
 
-import com.google.gson.JsonObject;
 import com.jsilval.marvel.core.data.source.MarvelDataSource;
 import com.jsilval.marvel.core.rest.MarvelClient;
 import com.jsilval.marvel.core.rest.ServiceGenerator;
@@ -47,17 +46,17 @@ public class MarvelRepository implements MarvelDataSource {
     public void getMarvels(String endpoint, @NonNull final LoadMarvelsCallback callback) {
         checkNotNull(callback);
         MarvelClient client = ServiceGenerator.createService(MarvelClient.class);
-        final Call<JsonObject> marvel = client.getMarvel(endpoint, API_KEY, TS, HASH);
+        final Call<List<Marvel>> marvel = client.getMarvel(endpoint, API_KEY, TS, HASH);
 
-        marvel.enqueue(new Callback<JsonObject>() {
+        marvel.enqueue(new Callback<List<Marvel>>() {
             @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                Log.d(getClass().getSimpleName(), "onResponse: ");
+            public void onResponse(@NonNull Call<List<Marvel>> call, @NonNull Response<List<Marvel>> response) {
+
             }
 
             @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                Log.d(getClass().getSimpleName(), "onFailure: ");
+            public void onFailure(@NonNull Call<List<Marvel>> call, @NonNull Throwable t) {
+
             }
         });
 

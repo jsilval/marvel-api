@@ -1,9 +1,13 @@
 package com.jsilval.marvel.core.rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.jsilval.marvel.features.list.model.Marvel;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
@@ -12,7 +16,7 @@ public class ServiceGenerator {
 
     private static Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(apiBaseUrl)
-            .addConverterFactory(JacksonConverterFactory.create());
+            .addConverterFactory(buildGsonConverter());
 
     private static HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -26,5 +30,14 @@ public class ServiceGenerator {
             retrofit = builder.build();
         }
         return retrofit.create(serviceClass);
+    }
+
+    private static GsonConverterFactory buildGsonConverter() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+
+        gsonBuilder.registerTypeAdapter(Marvel.class, new MarvelDeserializer());
+        Gson myGson = gsonBuilder.create();
+
+        return GsonConverterFactory.create(myGson);
     }
 }
